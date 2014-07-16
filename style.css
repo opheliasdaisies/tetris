@@ -1,9 +1,13 @@
+/* 10 tiles across */
+/* each tile is 20px */
+
 body {
   background-image: url(./tiles.jpg);
 }
 
 .game {
   background-color: black;
-  height: 500px;
-  width: 100px;
+  height: 400px;
+  width: 200px;
+  margin: auto;
 }
