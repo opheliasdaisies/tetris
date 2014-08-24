@@ -1,12 +1,13 @@
 $(document).ready(function(){
-  
-  function playPiece(){
-    // (".game").append("<div class='tile'></div>");
-  }
+  var board = createBoardGrid(10, 20);
 
-  $(".start").on("click", function(){
-    $(this).remove();
-    // playPiece();
-  });
+
+  var theData = {boardGrid: board};
+
+  var templateScript = $("#game").html();
+  console.log(templateScript);
+  var template = Handlebars.compile(templateScript);
+  console.log(template(theData));
+  $(document.body).append(template(theData));
 
 });
