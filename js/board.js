@@ -21,7 +21,7 @@ Board.prototype.createBoardGrid = function(width, height){
 
 Board.prototype.addPiece = function(){
   this.activePiece = new Piece(this);
-  this.activePiece.addPieceToBoard();
+  this.activePiece.addOrRemovePiece('add');
 }
 
 Board.prototype.start = function(){
