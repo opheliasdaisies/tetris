@@ -131,18 +131,13 @@ Piece.prototype.tick = function() {
   this.moveDown();
 };
 
-Piece.prototype.addOrRemovePiece = function(addOrRemove) {
+Piece.prototype.addPiece = function() {
   var boardRow = this.coordinates[0];
   var boardColumn = this.coordinates[1];
   for (var shapeRow = 0; shapeRow < this.orientation.length; shapeRow++) {
     for (var shapeColumn = 0; shapeColumn < this.orientation[shapeRow].length; shapeColumn++) {
-      if (addOrRemove === 'add' && this.orientation[shapeRow][shapeColumn] === true) {
+      if (this.orientation[shapeRow][shapeColumn] === true) {
         this.board.grid[boardRow][boardColumn] = true;
-      } else if (addOrRemove === 'freeze' && this.orientation[shapeRow][shapeColumn] === true) {
-        this.board.grid[boardRow][boardColumn] = 'frozen';
-        // this.board.activePiece = undefined;
-      } else {
-        this.board.grid[boardRow][boardColumn] = undefined;
       }
       boardColumn++;
     }
@@ -151,32 +146,79 @@ Piece.prototype.addOrRemovePiece = function(addOrRemove) {
   }
 }
 
+Piece.prototype.removePiece = function() {
+  this.board.grid.forEach(function(row){
+    row.forEach(function(tile, i){
+      if (tile === true) {
+        row[i] = undefined;
+      }
+    });
+  });
+}
+
+Piece.prototype.freezePiece = function(){
+  this.board.grid.forEach(function(row){
+    row.forEach(function(tile, i){
+      if (tile === true) {
+        row[i] = 'frozen';
+      }
+    });
+  });
+}
+
+// Piece.prototype.addOrRemovePiece = function(addOrRemove) {
+//   var boardRow = this.coordinates[0];
+//   var boardColumn = this.coordinates[1];
+//   for (var shapeRow = 0; shapeRow < this.orientation.length; shapeRow++) {
+//     for (var shapeColumn = 0; shapeColumn < this.orientation[shapeRow].length; shapeColumn++) {
+//       if (addOrRemove === 'add' && this.orientation[shapeRow][shapeColumn] === true) {
+//         this.board.grid[boardRow][boardColumn] = true;
+//       } else if (addOrRemove === 'freeze' && this.orientation[shapeRow][shapeColumn] === true) {
+//         this.board.grid[boardRow][boardColumn] = 'frozen';
+//         // this.board.activePiece = undefined;
+//       } else {
+//         this.board.grid[boardRow][boardColumn] = undefined;
+//       }
+//       boardColumn++;
+//     }
+//     boardRow ++;
+//     boardColumn = this.coordinates[1];
+//   }
+// }
+
 Piece.prototype.moveDown = function() {
-  var cannotMoveDown = this.checkForStop();
-  if (cannotMoveDown === true){
-    this.addOrRemovePiece('freeze');
+  if (this.checkForStop()) {
+    this.freezePiece();
     this.board.activePiece = undefined;
   } else {
-    this.addOrRemovePiece('remove');
+    this.removePiece();
     this.coordinates[0]++;
-    this.addOrRemovePiece('add');
+    this.addPiece();
   }
 }
 
 Piece.prototype.checkForStop = function() {
-  var shapeRows = this.orientation.length;
-  var nextBoardRow = this.coordinates[0] + shapeRows;
+  var shapeRowLength = this.orientation.length;
+  var boardRowCoordinates = this.coordinates[0];
+  var nextBoardRow = boardRowCoordinates + shapeRowLength;
   var boardColumn = this.coordinates[1];
-  var bottomShapeRow = this.orientation[shapeRows - 1];
+  var bottomShapeRow = this.orientation[shapeRowLength - 1];
   if (nextBoardRow >= this.board.grid.length) {
     return true;
   }
-  // for (var shapeColumn = 0; shapeColumn < bottomShapeRow.length; shapeColumn++) {
-  //   if (bottomShapeRow[shapeColumn] === true) {
-  //     var nextTile
-  //     if (this.board.grid[nextBoardRow][boardColumn] === true || this.board.grid)
-  //   }
-  // }
+  for (var shapeRow = 0; shapeRow < this.orientation.length; shapeRow++) {
+    for (var shapeColumn = 0; shapeColumn < this.orientation[shapeRow].length; shapeColumn++) {
+      if (this.orientation[shapeRow][shapeColumn]) {
+        if (board.grid[boardRowCoordinates+1][boardColumn] === 'frozen') {
+          return true;
+        }
+      }
+      boardColumn++;
+    }
+    boardRowCoordinates++;
+    boardColumn = this.coordinates[1];
+  }
+  return false;
 }
 
 Piece.pieces = pieces;
