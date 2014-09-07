@@ -117,4 +117,13 @@ var pieces = [
       ]
     ]
   }
-]
+];
+
+var Piece = function(board){
+};
+
+Piece.prototype.tick = function() {
+  //move and shit
+};
+
+Piece.pieces = pieces;
