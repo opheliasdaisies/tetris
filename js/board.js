@@ -7,7 +7,7 @@ var Board = function(width, height){
   this.scoreTemplate = Handlebars.compile($('#score').html());
   this.boardTemplate = Handlebars.compile($('#board').html());
   this.drawGame();
-  this.piece;
+  this.activePiece;
 };
 
 Board.prototype.createBoardGrid = function(width, height){
@@ -20,7 +20,8 @@ Board.prototype.createBoardGrid = function(width, height){
 }
 
 Board.prototype.addPiece = function(){
-  this.piece = new Piece(this);
+  this.activePiece = new Piece(this);
+  this.activePiece.addPieceToBoard();
 }
 
 Board.prototype.start = function(){
@@ -32,9 +33,14 @@ Board.prototype.stop = function(){
 }
 
 Board.prototype.tick = function(){
-  // console.log('tick', this);
-  this.piece.tick();
-  this.updateBoard();
+  if (this.activePiece === undefined) {
+    this.addPiece();
+    this.updateBoard();
+  } else {
+    // console.log('tick', this);
+    this.activePiece.tick();
+    this.updateBoard();
+  }
 }
 
 Board.prototype.drawGame = function(){
