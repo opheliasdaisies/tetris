@@ -122,8 +122,8 @@ var pieces = [
 var Piece = function(board){
   this.board = board;
   this.coordinates = [0, board.grid[0].length/2-1];
-  // this.shape = Math.floor(Math.random) * Piece.pieces.length;
-  this.shape = Piece.pieces[1];
+  this.shape = Piece.pieces[Math.floor(Math.random() * Piece.pieces.length)];
+  // this.shape = Piece.pieces[1];
   this.orientation = this.shape.positions[0];
 };
 
@@ -139,8 +139,8 @@ Piece.prototype.addOrRemovePiece = function(addOrRemove) {
       if (addOrRemove === 'add' && this.orientation[shapeRow][shapeColumn] === true) {
         this.board.grid[boardRow][boardColumn] = true;
       } else if (addOrRemove === 'freeze' && this.orientation[shapeRow][shapeColumn] === true) {
-        this.board.grid[boardRow][boardColumn] = false;
-        this.board.activePiece = undefined;
+        this.board.grid[boardRow][boardColumn] = 'frozen';
+        // this.board.activePiece = undefined;
       } else {
         this.board.grid[boardRow][boardColumn] = undefined;
       }
@@ -152,9 +152,15 @@ Piece.prototype.addOrRemovePiece = function(addOrRemove) {
 }
 
 Piece.prototype.moveDown = function() {
-  this.addOrRemovePiece('remove');
-  this.coordinates[0]++;
-  this.addOrRemovePiece('add');
+  var cannotMoveDown = this.checkForStop();
+  if (cannotMoveDown === true){
+    this.addOrRemovePiece('freeze');
+    this.board.activePiece = undefined;
+  } else {
+    this.addOrRemovePiece('remove');
+    this.coordinates[0]++;
+    this.addOrRemovePiece('add');
+  }
 }
 
 Piece.prototype.checkForStop = function() {
