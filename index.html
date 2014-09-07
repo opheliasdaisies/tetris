@@ -8,17 +8,31 @@
     <script src="./js/lib/handlebars-v1.3.0.js"></script>
     <script src="./js/tetris.js"></script>
     <script src="./js/board.js"></script>
+    <script src="./js/pieces.js"></script>
   </head>
   <body>
     <button class='start'>Start</button>
     <script id="game" type="text/x-handlebars-template">
-      {{#each boardGrid }}
+      <div class="score"></div>
+      <div class="board"></div>
+    </script>
+
+    <script id="board" type="text/x-handlebars-template">
+      {{#each grid }}
         <div class='row'>
           {{#each this }}
+            {{#if . }}
+            <div class='tile active'></div>
+            {{else}}
             <div class='tile'></div>
+            {{/if}}
           {{/each}}
         </div>
       {{/each}}
+    </script>
+
+    <script id="score" type="text/x-handlebars-template">
+      The score is: {{score}}
     </script>
   </body>
 </html>
