@@ -166,34 +166,18 @@ Piece.prototype.freezePiece = function(){
   });
 }
 
-// Piece.prototype.addOrRemovePiece = function(addOrRemove) {
-//   var boardRow = this.coordinates[0];
-//   var boardColumn = this.coordinates[1];
-//   for (var shapeRow = 0; shapeRow < this.orientation.length; shapeRow++) {
-//     for (var shapeColumn = 0; shapeColumn < this.orientation[shapeRow].length; shapeColumn++) {
-//       if (addOrRemove === 'add' && this.orientation[shapeRow][shapeColumn] === true) {
-//         this.board.grid[boardRow][boardColumn] = true;
-//       } else if (addOrRemove === 'freeze' && this.orientation[shapeRow][shapeColumn] === true) {
-//         this.board.grid[boardRow][boardColumn] = 'frozen';
-//         // this.board.activePiece = undefined;
-//       } else {
-//         this.board.grid[boardRow][boardColumn] = undefined;
-//       }
-//       boardColumn++;
-//     }
-//     boardRow ++;
-//     boardColumn = this.coordinates[1];
-//   }
-// }
-
 Piece.prototype.moveDown = function() {
-  if (this.checkForStop()) {
-    this.freezePiece();
-    this.board.activePiece = undefined;
-  } else {
-    this.removePiece();
-    this.coordinates[0]++;
-    this.addPiece();
+  var currentTime = Date.now();
+  if (currentTime - this.board.timeOfLastMoveDown >= this.board.speed) {
+    this.board.timeOfLastMoveDown = currentTime;
+    if (this.checkForStop()) {
+      this.freezePiece();
+      this.board.activePiece = undefined;
+    } else {
+      this.removePiece();
+      this.coordinates[0]++;
+      this.addPiece();
+    }
   }
 }
 

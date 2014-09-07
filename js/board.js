@@ -8,6 +8,8 @@ var Board = function(width, height){
   this.boardTemplate = Handlebars.compile($('#board').html());
   this.drawGame();
   this.activePiece;
+  this.timeOfLastMoveDown;
+  this.speed = 500;
 };
 
 Board.prototype.createBoardGrid = function(width, height){
@@ -26,6 +28,7 @@ Board.prototype.addPiece = function(){
 
 Board.prototype.start = function(){
   this.intervalId = window.setInterval(this.tick.bind(this), 500);
+  this.timeOfLastMoveDown = Date.now();
 }
 
 Board.prototype.stop = function(){
