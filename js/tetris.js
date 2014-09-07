@@ -6,4 +6,8 @@ $(document).ready(function(){
     board.start();
   });
 
+  $('.pause').on('click', function(){
+    board.stop();
+  });
+
 });
