@@ -15,7 +15,7 @@ $(document).ready(function(){
     if (key === 37) {
       board.input.left = true;
     } else if (key === 38 ) {
-      console.log('up');
+      board.input.up = true;
     } else if (key === 39) {
       board.input.right = true;
     } else if (key === 40) {
@@ -28,7 +28,7 @@ $(document).ready(function(){
     if (key === 37) {
       board.input.left = false;
     } else if (key === 38 ) {
-      console.log('up');
+      board.input.up = false;
     } else if (key === 39) {
       board.input.right = false;
     } else if (key === 40) {

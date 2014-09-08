@@ -62,8 +62,10 @@ var pieces = [
         [, true],
         [true, true]
       ],
-      [true],
-      [true, true, true]
+      [
+        [true],
+        [true, true, true]
+      ]
     ]
   },
   {
@@ -123,8 +125,9 @@ var Piece = function(board){
   this.board = board;
   this.coordinates = [0, board.grid[0].length/2-1];
   this.shape = Piece.pieces[Math.floor(Math.random() * Piece.pieces.length)];
-  // this.shape = Piece.pieces[1];
-  this.orientation = this.shape.positions[0];
+  this.position = 0;
+  this.numberOfOrientations = this.shape.positions.length;
+  this.orientation = this.shape.positions[this.position];
   this.frozen = false;
 };
 
@@ -134,6 +137,9 @@ Piece.prototype.tick = function() {
   }
   if (this.board.input.right) {
     this.moveRight();
+  }
+  if (this.board.input.up) {
+    this.rotate();
   }
   this.moveDown();
   if (!this.frozen){
@@ -272,6 +278,19 @@ Piece.prototype.findMaxWidth = function() {
     }
   });
   return maxWidth;
+}
+
+Piece.prototype.rotate = function() {
+  console.log(this.numberOfOrientations);
+  console.log(this.position);
+  if (this.position < this.numberOfOrientations-1 ) {
+    console.log('rotate');
+    this.position = this.position + 1
+  } else {
+    console.log('reset postition');
+    this.position = 0;
+  }
+  this.orientation = this.shape.positions[this.position];
 }
 
 Piece.pieces = pieces;

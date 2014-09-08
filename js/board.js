@@ -13,7 +13,8 @@ var Board = function(width, height){
   this.input = {
     right: false,
     left: false,
-    down: false
+    down: false,
+    up: false
   }
 };
 
