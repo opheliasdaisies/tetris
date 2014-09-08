@@ -243,8 +243,8 @@ Piece.prototype.canMoveRight = function() {
   var boardRow = this.coordinates[0];
   var boardColumn = this.coordinates[1];
   var canMoveRight = true;
-  var pieceWidth = this.findMaxWidth;
-  if (boardColumn + pieceWidth > boardRow.length) {
+  var pieceWidth = this.findMaxWidth();
+  if (boardColumn + pieceWidth >= this.board.grid[0].length) {
     canMoveRight = false;
   } else {
     this.board.grid.forEach(function(row){
