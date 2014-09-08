@@ -286,14 +286,45 @@ Piece.prototype.rotate = function() {
   if (currentTime - this.timeOfLastRotation > 100) {
     this.timeOfLastRotation = currentTime;
     if (this.position < this.numberOfOrientations-1 ) {
-      console.log('rotate');
       this.position = this.position + 1
     } else {
-      console.log('reset postition');
       this.position = 0;
     }
     this.orientation = this.shape.positions[this.position];
+    this.rotateCompensation();
+  }
+}
+
+Piece.prototype.rotateCompensation = function() {;
+  if (!this.canMoveRight()) {
+    var pieceWidth = this.findMaxWidth();
+    var edge = this.coordinates[1] + pieceWidth;
+    this.coordinates[1]-=(edge - this.board.grid[0].length);
+  }
+  if (this.checkForStop()) {
+    var edge = this.coordinates[0] + this.orientation.length;
+    this.coordinates[0]-=(edge - this.board.grid.length);
   }
 }
 
 Piece.pieces = pieces;
+
+
+// Piece.prototype.canMoveRight = function() {
+//   var boardRow = this.coordinates[0];
+//   var boardColumn = this.coordinates[1];
+//   var canMoveRight = true;
+//   var pieceWidth = this.findMaxWidth();
+//   if (boardColumn + pieceWidth >= this.board.grid[0].length) {
+//     canMoveRight = false;
+//   } else {
+//     this.board.grid.forEach(function(row){
+//       row.forEach(function(tile, i) {
+//         if (tile === true && row[i+1] === 'frozen') {
+//           canMoveRight = false;
+//         }
+//       });
+//     });
+//   }
+//   return canMoveRight;
+// }
