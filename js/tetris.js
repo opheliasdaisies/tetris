@@ -19,7 +19,7 @@ $(document).ready(function(){
     } else if (key === 39) {
       board.input.right = true;
     } else if (key === 40) {
-      console.log('down');
+      board.input.down = true;
     }
   });
 
@@ -32,7 +32,7 @@ $(document).ready(function(){
     } else if (key === 39) {
       board.input.right = false;
     } else if (key === 40) {
-      console.log('down');
+      board.input.down = false;
     }
   });
 

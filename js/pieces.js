@@ -180,7 +180,7 @@ Piece.prototype.freezePiece = function(){
 
 Piece.prototype.moveDown = function() {
   var currentTime = Date.now();
-  if (currentTime - this.board.timeOfLastMoveDown >= this.board.speed) {
+  if (currentTime - this.board.timeOfLastMoveDown >= this.board.speed || this.board.input.down) {
     this.board.timeOfLastMoveDown = currentTime;
     if (this.checkForStop()) {
       this.freezePiece();

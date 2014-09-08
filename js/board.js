@@ -12,7 +12,8 @@ var Board = function(width, height){
   this.speed = 500;
   this.input = {
     right: false,
-    left: false
+    left: false,
+    down: false
   }
 };
 
@@ -31,7 +32,7 @@ Board.prototype.addPiece = function(){
 }
 
 Board.prototype.start = function(){
-  this.intervalId = window.setInterval(this.tick.bind(this), 100);
+  this.intervalId = window.setInterval(this.tick.bind(this), 50);
   this.timeOfLastMoveDown = Date.now();
 }
 
