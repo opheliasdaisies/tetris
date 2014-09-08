@@ -17,7 +17,7 @@ $(document).ready(function(){
     } else if (key === 38 ) {
       console.log('up');
     } else if (key === 39) {
-      console.log('right');
+      board.input.right = true;
     } else if (key === 40) {
       console.log('down');
     }
@@ -30,7 +30,7 @@ $(document).ready(function(){
     } else if (key === 38 ) {
       console.log('up');
     } else if (key === 39) {
-      console.log('right');
+      board.input.right = false;
     } else if (key === 40) {
       console.log('down');
     }

@@ -132,12 +132,14 @@ Piece.prototype.tick = function() {
   if (this.board.input.left) {
     this.moveLeft();
   }
+  if (this.board.input.right) {
+    this.moveRight();
+  }
   this.moveDown();
   if (!this.frozen){
     this.removePiece();
     this.addPiece();
   }
-  console.log(this.board.grid[this.coordinates[0]][this.coordinates[1]]);
 };
 
 Piece.prototype.addPiece = function() {
@@ -184,9 +186,7 @@ Piece.prototype.moveDown = function() {
       this.freezePiece();
       this.board.activePiece = undefined;
     } else {
-      // this.removePiece();
       this.coordinates[0]++;
-      // this.addPiece();
     }
   }
 }
@@ -235,10 +235,43 @@ Piece.prototype.canMoveLeft = function() {
 
 Piece.prototype.moveLeft = function() {
   if (this.canMoveLeft()) {
-    // this.removePiece();
     this.coordinates[1]--;
-    // this.addPiece;
   }
+}
+
+Piece.prototype.canMoveRight = function() {
+  var boardRow = this.coordinates[0];
+  var boardColumn = this.coordinates[1];
+  var canMoveRight = true;
+  var pieceWidth = this.findMaxWidth;
+  if (boardColumn + pieceWidth > boardRow.length) {
+    canMoveRight = false;
+  } else {
+    this.board.grid.forEach(function(row){
+      row.forEach(function(tile, i) {
+        if (tile === true && row[i+1] === 'frozen') {
+          canMoveRight = false;
+        }
+      });
+    });
+  }
+  return canMoveRight;
+}
+
+Piece.prototype.moveRight = function() {
+  if (this.canMoveRight()) {
+    this.coordinates[1]++;
+  }
+}
+
+Piece.prototype.findMaxWidth = function() {
+  var maxWidth = 0;
+  this.orientation.forEach(function(row){
+    if (row.length > maxWidth) {
+      maxWidth = row.length;
+    }
+  });
+  return maxWidth;
 }
 
 Piece.pieces = pieces;
