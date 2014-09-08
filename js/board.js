@@ -8,6 +8,13 @@ var Board = function(width, height){
   this.boardTemplate = Handlebars.compile($('#board').html());
   this.drawGame();
   this.activePiece;
+  this.timeOfLastMoveDown;
+  this.speed = 500;
+  this.input = {
+    right: false,
+    left: false,
+    down: false
+  }
 };
 
 Board.prototype.createBoardGrid = function(width, height){
@@ -21,11 +28,12 @@ Board.prototype.createBoardGrid = function(width, height){
 
 Board.prototype.addPiece = function(){
   this.activePiece = new Piece(this);
-  this.activePiece.addPieceToBoard();
+  this.activePiece.addPiece();
 }
 
 Board.prototype.start = function(){
-  this.intervalId = window.setInterval(this.tick.bind(this), 500);
+  this.intervalId = window.setInterval(this.tick.bind(this), 50);
+  this.timeOfLastMoveDown = Date.now();
 }
 
 Board.prototype.stop = function(){
@@ -35,12 +43,11 @@ Board.prototype.stop = function(){
 Board.prototype.tick = function(){
   if (this.activePiece === undefined) {
     this.addPiece();
-    this.updateBoard();
   } else {
     // console.log('tick', this);
     this.activePiece.tick();
-    this.updateBoard();
   }
+  this.updateBoard();
 }
 
 Board.prototype.drawGame = function(){
