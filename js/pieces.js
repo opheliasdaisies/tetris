@@ -129,6 +129,7 @@ var Piece = function(board){
   this.numberOfOrientations = this.shape.positions.length;
   this.orientation = this.shape.positions[this.position];
   this.frozen = false;
+  this.timeOfLastRotation = Date.now();
 };
 
 Piece.prototype.tick = function() {
@@ -281,16 +282,18 @@ Piece.prototype.findMaxWidth = function() {
 }
 
 Piece.prototype.rotate = function() {
-  console.log(this.numberOfOrientations);
-  console.log(this.position);
-  if (this.position < this.numberOfOrientations-1 ) {
-    console.log('rotate');
-    this.position = this.position + 1
-  } else {
-    console.log('reset postition');
-    this.position = 0;
+  var currentTime = Date.now();
+  if (currentTime - this.timeOfLastRotation > 100) {
+    this.timeOfLastRotation = currentTime;
+    if (this.position < this.numberOfOrientations-1 ) {
+      console.log('rotate');
+      this.position = this.position + 1
+    } else {
+      console.log('reset postition');
+      this.position = 0;
+    }
+    this.orientation = this.shape.positions[this.position];
   }
-  this.orientation = this.shape.positions[this.position];
 }
 
 Piece.pieces = pieces;
