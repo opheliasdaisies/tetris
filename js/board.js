@@ -44,9 +44,6 @@ Board.prototype.tick = function(){
     this.addPiece();
   } else {
     // console.log('tick', this);
-    if (this.input.left) {
-      this.activePiece.moveLeft();
-    }
     this.activePiece.tick();
   }
   this.updateBoard();
