@@ -125,10 +125,19 @@ var Piece = function(board){
   this.shape = Piece.pieces[Math.floor(Math.random() * Piece.pieces.length)];
   // this.shape = Piece.pieces[1];
   this.orientation = this.shape.positions[0];
+  this.frozen = false;
 };
 
 Piece.prototype.tick = function() {
+  if (this.board.input.left) {
+    this.moveLeft();
+  }
   this.moveDown();
+  if (!this.frozen){
+    this.removePiece();
+    this.addPiece();
+  }
+  console.log(this.board.grid[this.coordinates[0]][this.coordinates[1]]);
 };
 
 Piece.prototype.addPiece = function() {
@@ -157,6 +166,7 @@ Piece.prototype.removePiece = function() {
 }
 
 Piece.prototype.freezePiece = function(){
+  this.frozen = true;
   this.board.grid.forEach(function(row){
     row.forEach(function(tile, i){
       if (tile === true) {
@@ -174,9 +184,9 @@ Piece.prototype.moveDown = function() {
       this.freezePiece();
       this.board.activePiece = undefined;
     } else {
-      this.removePiece();
+      // this.removePiece();
       this.coordinates[0]++;
-      this.addPiece();
+      // this.addPiece();
     }
   }
 }
@@ -203,6 +213,32 @@ Piece.prototype.checkForStop = function() {
     boardColumn = this.coordinates[1];
   }
   return false;
+}
+
+Piece.prototype.canMoveLeft = function() {
+  var boardRow = this.coordinates[0];
+  var boardColumn = this.coordinates[1];
+  var canMoveLeft = true;
+  if (boardColumn <= 0) {
+    canMoveLeft = false;
+  } else {
+    this.board.grid.forEach(function(row){
+      row.forEach(function(tile, i){
+        if (tile === true && row[i-1] === 'frozen') {
+          canMoveLeft = false;
+        }
+      });
+    });
+  }
+  return canMoveLeft;
+}
+
+Piece.prototype.moveLeft = function() {
+  if (this.canMoveLeft()) {
+    // this.removePiece();
+    this.coordinates[1]--;
+    // this.addPiece;
+  }
 }
 
 Piece.pieces = pieces;

@@ -10,6 +10,10 @@ var Board = function(width, height){
   this.activePiece;
   this.timeOfLastMoveDown;
   this.speed = 500;
+  this.input = {
+    right: false,
+    left: false
+  }
 };
 
 Board.prototype.createBoardGrid = function(width, height){
@@ -27,7 +31,7 @@ Board.prototype.addPiece = function(){
 }
 
 Board.prototype.start = function(){
-  this.intervalId = window.setInterval(this.tick.bind(this), 500);
+  this.intervalId = window.setInterval(this.tick.bind(this), 100);
   this.timeOfLastMoveDown = Date.now();
 }
 
@@ -38,12 +42,14 @@ Board.prototype.stop = function(){
 Board.prototype.tick = function(){
   if (this.activePiece === undefined) {
     this.addPiece();
-    this.updateBoard();
   } else {
     // console.log('tick', this);
+    if (this.input.left) {
+      this.activePiece.moveLeft();
+    }
     this.activePiece.tick();
-    this.updateBoard();
   }
+  this.updateBoard();
 }
 
 Board.prototype.drawGame = function(){
