@@ -21,7 +21,10 @@ var Board = function(width, height){
 Board.prototype.createBoardGrid = function(width, height){
   var board = [];
   for (var row = 0; row < height; row++) {
-    var innerArray = new Array(width);
+    var innerArray = [];
+    for (var col = 0; col < width; col ++) {
+      innerArray.push(false);
+    }
     board.push(innerArray);
   }
   return board;
@@ -42,7 +45,7 @@ Board.prototype.stop = function(){
 }
 
 Board.prototype.tick = function(){
-  if (this.activePiece === undefined) {
+  if (!this.activePiece) {
     this.addPiece();
   } else {
     // console.log('tick', this);
@@ -53,28 +56,23 @@ Board.prototype.tick = function(){
 }
 
 Board.prototype.checkGridForCompleteRows = function(){
-  this.grid.forEach(function(row, i){
-    var rowComplete = true;
-    console.log(row)
-    row.forEach(function(tile){
-      console.log('looking at tiles');
-      if (tile === undefined) {
-        console.log(tile);
-        rowComplete = false;
-      }
+  this.grid.forEach(function(row, rowIndex){
+    var rowComplete = row.every(function(tile){
+      return tile === "frozen";
     });
     if (rowComplete) {
-      // this.removeRow(i);
-      console.log(i, 'row complete!');
+      this.removeRow(rowIndex);
     }
   }.bind(this));
 }
 
-// Board.prototype.removeRow = function(rowIndex){
-//   this.grid[rowIndex].forEach(function(tile, i){
-//     this.grid[rowIndex][i] = undefined;
-//   }.bind(this));
-// }
+Board.prototype.removeRow = function(rowIndex){
+  this.grid[rowIndex].forEach(function(tile, i){
+    this.grid[rowIndex][i] = false;
+  }.bind(this));
+  var removed = this.grid.splice(rowIndex, 1);
+  this.grid.unshift(removed[0]);
+}
 
 Board.prototype.drawGame = function(){
   $(document.body).append(this.gameTemplate(this));

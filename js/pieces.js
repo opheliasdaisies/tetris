@@ -168,7 +168,7 @@ Piece.prototype.removePiece = function() {
   this.board.grid.forEach(function(row){
     row.forEach(function(tile, i){
       if (tile === true) {
-        row[i] = undefined;
+        row[i] = false;
       }
     });
   });
