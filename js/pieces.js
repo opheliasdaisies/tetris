@@ -62,8 +62,10 @@ var pieces = [
         [, true],
         [true, true]
       ],
-      [true],
-      [true, true, true]
+      [
+        [true],
+        [true, true, true]
+      ]
     ]
   },
   {
@@ -123,9 +125,11 @@ var Piece = function(board){
   this.board = board;
   this.coordinates = [0, board.grid[0].length/2-1];
   this.shape = Piece.pieces[Math.floor(Math.random() * Piece.pieces.length)];
-  // this.shape = Piece.pieces[1];
-  this.orientation = this.shape.positions[0];
+  this.position = 0;
+  this.numberOfOrientations = this.shape.positions.length;
+  this.orientation = this.shape.positions[this.position];
   this.frozen = false;
+  this.timeOfLastRotation = Date.now();
 };
 
 Piece.prototype.tick = function() {
@@ -134,6 +138,9 @@ Piece.prototype.tick = function() {
   }
   if (this.board.input.right) {
     this.moveRight();
+  }
+  if (this.board.input.up) {
+    this.rotate();
   }
   this.moveDown();
   if (!this.frozen){
@@ -155,7 +162,7 @@ Piece.prototype.addPiece = function() {
     boardRow ++;
     boardColumn = this.coordinates[1];
   }
-}
+};
 
 Piece.prototype.removePiece = function() {
   this.board.grid.forEach(function(row){
@@ -165,7 +172,7 @@ Piece.prototype.removePiece = function() {
       }
     });
   });
-}
+};
 
 Piece.prototype.freezePiece = function(){
   this.frozen = true;
@@ -176,7 +183,7 @@ Piece.prototype.freezePiece = function(){
       }
     });
   });
-}
+};
 
 Piece.prototype.moveDown = function() {
   var currentTime = Date.now();
@@ -189,7 +196,7 @@ Piece.prototype.moveDown = function() {
       this.coordinates[0]++;
     }
   }
-}
+};
 
 Piece.prototype.checkForStop = function() {
   var shapeRowLength = this.orientation.length;
@@ -213,7 +220,7 @@ Piece.prototype.checkForStop = function() {
     boardColumn = this.coordinates[1];
   }
   return false;
-}
+};
 
 Piece.prototype.canMoveLeft = function() {
   var boardRow = this.coordinates[0];
@@ -231,13 +238,13 @@ Piece.prototype.canMoveLeft = function() {
     });
   }
   return canMoveLeft;
-}
+};
 
 Piece.prototype.moveLeft = function() {
   if (this.canMoveLeft()) {
     this.coordinates[1]--;
   }
-}
+};
 
 Piece.prototype.canMoveRight = function() {
   var boardRow = this.coordinates[0];
@@ -256,22 +263,80 @@ Piece.prototype.canMoveRight = function() {
     });
   }
   return canMoveRight;
-}
+};
 
 Piece.prototype.moveRight = function() {
   if (this.canMoveRight()) {
     this.coordinates[1]++;
   }
-}
+};
 
-Piece.prototype.findMaxWidth = function() {
+Piece.prototype.findMaxWidth = function(position) {
+  var shape = this.shape.positions[position] || this.orientation
   var maxWidth = 0;
-  this.orientation.forEach(function(row){
+  shape.forEach(function(row){
     if (row.length > maxWidth) {
       maxWidth = row.length;
     }
   });
   return maxWidth;
-}
+};
+
+Piece.prototype.rotate = function() {
+  var currentTime = Date.now();
+  if (currentTime - this.timeOfLastRotation > 100) {
+    this.timeOfLastRotation = currentTime;
+    var nextPosition = this.positionAfterRotation();
+    var nextCoordinates = this.wallKick(nextPosition);
+    if (this.canSpin(nextPosition, nextCoordinates)) {
+      this.position = nextPosition;
+      this.orientation = this.shape.positions[this.position];
+      this.coordinates = nextCoordinates;
+    }
+  }
+};
+
+Piece.prototype.canSpin = function(nextPosition, nextCoordinates) {
+  var boardRow = nextCoordinates[0];
+  var boardColumn = nextCoordinates[1];
+  var nextOrientation = this.shape.positions[nextPosition];
+  for (var shapeRow = 0; shapeRow < nextOrientation.length; shapeRow++) {
+    for (var shapeColumn = 0; shapeColumn < nextOrientation[shapeRow].length; shapeColumn++) {
+      if (this.board.grid[boardRow][boardColumn] === 'frozen') {
+        return false;
+      } else {
+        boardColumn++;
+      }
+    }
+    boardRow++;
+    boardColumn = this.coordinates[1];
+  }
+  return true;
+};
+
+Piece.prototype.wallKick = function(nextPosition) {
+  var boardRow = this.coordinates[0];
+  var boardColumn = this.coordinates[1];
+  var canMoveRight = true;
+  var pieceWidth = this.findMaxWidth(nextPosition);
+  var nextCoordinates = [boardRow, boardColumn];
+  if (boardColumn + pieceWidth >= this.board.grid[0].length){
+    var edge = this.coordinates[1] + pieceWidth;
+    nextCoordinates[1]-=(edge - this.board.grid[0].length);    
+  }
+  if (boardRow + this.shape.positions[nextPosition].length >= this.board.grid.length){
+    var edge = this.coordinates[0] + this.shape.positions[nextPosition].length;
+    nextCoordinates[0]-=(edge - this.board.grid.length);
+  }
+  return nextCoordinates;
+};
+
+Piece.prototype.positionAfterRotation = function() {
+  if (this.position < this.numberOfOrientations-1 ) {
+    return this.position + 1;
+  } else {
+    return 0;
+  }
+};
 
 Piece.pieces = pieces;
