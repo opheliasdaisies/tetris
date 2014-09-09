@@ -48,8 +48,33 @@ Board.prototype.tick = function(){
     // console.log('tick', this);
     this.activePiece.tick();
   }
+  this.checkGridForCompleteRows();
   this.updateBoard();
 }
+
+Board.prototype.checkGridForCompleteRows = function(){
+  this.grid.forEach(function(row, i){
+    var rowComplete = true;
+    console.log(row)
+    row.forEach(function(tile){
+      console.log('looking at tiles');
+      if (tile === undefined) {
+        console.log(tile);
+        rowComplete = false;
+      }
+    });
+    if (rowComplete) {
+      // this.removeRow(i);
+      console.log(i, 'row complete!');
+    }
+  }.bind(this));
+}
+
+// Board.prototype.removeRow = function(rowIndex){
+//   this.grid[rowIndex].forEach(function(tile, i){
+//     this.grid[rowIndex][i] = undefined;
+//   }.bind(this));
+// }
 
 Board.prototype.drawGame = function(){
   $(document.body).append(this.gameTemplate(this));
