@@ -56,14 +56,29 @@ Board.prototype.tick = function(){
 }
 
 Board.prototype.checkGridForCompleteRows = function(){
+  var rowCount = 0;
   this.grid.forEach(function(row, rowIndex){
     var rowComplete = row.every(function(tile){
       return tile === "frozen";
     });
     if (rowComplete) {
+      rowCount ++;
       this.removeRow(rowIndex);
     }
   }.bind(this));
+  this.rowRemovalScoring(rowCount);
+}
+
+Board.prototype.rowRemovalScoring = function(rowCount){
+  if (rowCount >= 4) {
+    this.score += 1200;
+  } else if (rowCount === 3) {
+    this.score += 300;
+  } else if (rowCount === 2) {
+    this.score += 100;
+  } else if (rowCount === 1) {
+    this.score += 40;
+  }
 }
 
 Board.prototype.removeRow = function(rowIndex){
