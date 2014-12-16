@@ -194,6 +194,9 @@ Piece.prototype.moveDown = function() {
       this.board.activePiece = undefined;
     } else {
       this.coordinates[0]++;
+      if (this.board.input.down) {
+        this.board.score ++;
+      }
     }
   }
 };
