@@ -3,8 +3,11 @@ var Board = function(width, height){
   this.playing = false;
   this.intervalId;
   this.score = 0;
+  this.level = 0;
+  this.rowsRemoved = 0;
   this.gameTemplate = Handlebars.compile($("#game").html());
   this.scoreTemplate = Handlebars.compile($('#score').html());
+  this.levelTemplate = Handlebars.compile($('#level').html());
   this.boardTemplate = Handlebars.compile($('#board').html());
   this.drawGame();
   this.activePiece;
@@ -87,6 +90,16 @@ Board.prototype.removeRow = function(rowIndex){
   }.bind(this));
   var removed = this.grid.splice(rowIndex, 1);
   this.grid.unshift(removed[0]);
+  this.rowsRemoved ++;
+  this.increaseLevel();
+}
+
+Board.prototype.increaseLevel = function(){
+  if (this.rowsRemoved >= 10){
+    this.level ++;
+    this.speed -= 20;
+    this.rowsRemoved = 0;
+  }
 }
 
 Board.prototype.drawGame = function(){
@@ -98,6 +111,9 @@ Board.prototype.updateBoard = function() {
 
   // update score
   $('.score').html(this.scoreTemplate(this));
+
+  // update level
+  $('.level').html(this.levelTemplate(this));
 
   // update board
   $('.board').html(this.boardTemplate(this));

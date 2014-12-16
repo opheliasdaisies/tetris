@@ -15,6 +15,7 @@
     <button class='pause'>Pause</button>
     <script id="game" type="text/x-handlebars-template">
       <div class="score"></div>
+      <div class="level"></div>
       <div class="board"></div>
     </script>
 
@@ -35,6 +36,11 @@
     <script id="score" type="text/x-handlebars-template">
       The score is: {{score}}
     </script>
+
+    <script id="level" type="text/x-handlebars-template">
+      Level {{level}}
+    </script>
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
