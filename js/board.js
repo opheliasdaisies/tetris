@@ -73,14 +73,15 @@ Board.prototype.checkGridForCompleteRows = function(){
 }
 
 Board.prototype.rowRemovalScoring = function(rowCount){
+  var levelCount = this.level + 1;
   if (rowCount >= 4) {
-    this.score += 1200;
+    this.score += (1200 * levelCount);
   } else if (rowCount === 3) {
-    this.score += 300;
+    this.score += (300 * levelCount);
   } else if (rowCount === 2) {
-    this.score += 100;
+    this.score += (100 * levelCount);
   } else if (rowCount === 1) {
-    this.score += 40;
+    this.score += (40 * levelCount);
   }
 }
 
