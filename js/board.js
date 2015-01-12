@@ -35,7 +35,12 @@ Board.prototype.createBoardGrid = function(width, height){
 
 Board.prototype.addPiece = function(){
   this.activePiece = new Piece(this);
-  this.activePiece.addPiece();
+  if (this.activePiece.pieceAlreadyExists()){
+    console.log("Game over!");
+    this.stop();
+  } else {
+    this.activePiece.addPiece();
+  }
 }
 
 Board.prototype.start = function(){

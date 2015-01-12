@@ -164,6 +164,21 @@ Piece.prototype.addPiece = function() {
   }
 };
 
+Piece.prototype.pieceAlreadyExists = function() {
+  var row = this.coordinates[0];
+  var column = this.coordinates[1];
+  for (var shapeRow = 0; shapeRow < this.orientation.length; shapeRow++) {
+    for (var shapeColumn = 0; shapeColumn < this.orientation[shapeRow].length; shapeColumn++) {
+      if (this.orientation[shapeRow][shapeColumn] === true && this.board.grid[row][column]) {
+        return true;
+      }
+      column++;
+    }
+    row ++;
+    column = this.coordinates[1];
+  }
+}
+
 Piece.prototype.removePiece = function() {
   this.board.grid.forEach(function(row){
     row.forEach(function(tile, i){
