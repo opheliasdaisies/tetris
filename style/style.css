@@ -24,3 +24,20 @@ body {
 .active {
   background-color: red;
 }
+
+.gameOver{
+  background-color: rgb(45,40,40);
+  width: 300px;
+  height: 75px;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border: inset 3px rgb(59, 123, 169);
+  margin: auto;
+  position: relative;
+  bottom: 300px;
+}
+
+.hidden{
+  display: none;
+}

@@ -36,7 +36,7 @@ Board.prototype.createBoardGrid = function(width, height){
 Board.prototype.addPiece = function(){
   this.activePiece = new Piece(this);
   if (this.activePiece.pieceAlreadyExists()){
-    console.log("Game over!");
+    $('.gameOver').removeClass('hidden');
     this.stop();
   } else {
     this.activePiece.addPiece();
